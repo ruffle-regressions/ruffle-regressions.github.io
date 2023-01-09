@@ -24,7 +24,7 @@ const optionGroups = {
 // Default config used by the player.
 const defaultConfig = {
     letterbox: "on",
-    logLevel: "warn",
+    logLevel: "info",
 };
 
 const swfToFlashVersion = {
