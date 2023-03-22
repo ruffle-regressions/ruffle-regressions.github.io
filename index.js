@@ -25,6 +25,7 @@ const optionGroups = {
 const defaultConfig = {
     letterbox: "on",
     logLevel: "info",
+    maxExecutionDuration: {"secs": 15, "nanos": 0},
 };
 
 const swfToFlashVersion = {
