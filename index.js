@@ -1,5 +1,5 @@
-//import { RufflePlayer } from "./ruffle-core";
-//window.customElements.define("ruffle-player", RufflePlayer);
+const ruffle = window.RufflePlayer.newest();
+
 let player;
 
 const main = document.getElementById("main");
@@ -14,6 +14,7 @@ const sampleFileInput = document.getElementById("sample-swfs");
 const localFileName = document.getElementById("local-file-name");
 const closeModal = document.getElementById("close-modal");
 const openModal = document.getElementById("open-modal");
+const reloadSwf = document.getElementById("reload-swf");
 const metadataModal = document.getElementById("metadata-modal");
 // prettier-ignore
 const optionGroups = {
@@ -86,10 +87,9 @@ function unload() {
 
 function load(options) {
     unload();
-    const ruffle = window.RufflePlayer.newest();
     player = ruffle.createPlayer();
     player.id = "player";
-    document.getElementById("main").appendChild(player);
+    main.append(player);
     player.load(options);
     player.addEventListener("loadedmetadata", function () {
         if (this.metadata) {
@@ -141,7 +141,7 @@ async function loadFile(file) {
     }
     hideSample();
     const data = await new Response(file).arrayBuffer();
-    load({ data, ...defaultConfig });
+    load({ data: data, swfFileName: file.name, ...defaultConfig });
 }
 
 function loadSample() {
@@ -208,6 +208,15 @@ closeModal.addEventListener("click", () => {
 
 openModal.addEventListener("click", () => {
     metadataModal.style.display = "block";
+});
+
+reloadSwf.addEventListener("click", () => {
+    if (player) {
+        const confirmReload = confirm("Reload the current SWF?");
+        if (confirmReload) {
+            player.load(player.loadedConfig);
+        }
+    }
 });
 
 window.addEventListener("load", () => {
