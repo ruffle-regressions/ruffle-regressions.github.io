@@ -26,6 +26,7 @@ const optionGroups = {
 const defaultConfig = {
     letterbox: "on",
     logLevel: "info",
+    forceScale: true,
     maxExecutionDuration: {"secs": 30, "nanos": 0},
 };
 
