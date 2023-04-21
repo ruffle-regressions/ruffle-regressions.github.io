@@ -6,6 +6,7 @@
 @media only screen and (max-width: 800px) {
     #ruffle-version-container {
         display: block;
+        margin-bottom: 10px;
     }
 }
 
