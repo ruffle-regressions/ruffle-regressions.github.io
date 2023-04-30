@@ -78,7 +78,7 @@
                         const lines = js.split("\n");
                         for (const line of lines) {
                             if (line.indexOf("logLevel") !== -1) {
-                                jsCodeArray.push('    logLevel: "info",\n    maxExecutionDuration: 30,');
+                                jsCodeArray.push('    logLevel: "info",\n    maxExecutionDuration: {"secs": 30, "nanos": 0},');
                             }
                             else if (line.indexOf("import ") !== 0 && line.indexOf("PublicAPI") === -1) {
                                 jsCodeArray.push(line);
