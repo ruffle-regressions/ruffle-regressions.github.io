@@ -78,7 +78,11 @@
                         const lines = js.split("\n");
                         for (const line of lines) {
                             if (line.indexOf("logLevel") !== -1) {
-                                jsCodeArray.push('    logLevel: "info",\n    maxExecutionDuration: {"secs": 30, "nanos": 0},');
+                                if (version && new Date(version.split(".").slice(-3).join("/")) < new Date("2023/4/26")) {
+                                    jsCodeArray.push('    logLevel: "info",\n    maxExecutionDuration: {"secs": 30, "nanos": 0},');
+                                } else {
+                                    jsCodeArray.push('    logLevel: "info",\n    maxExecutionDuration: 30,');
+                                }
                             }
                             else if (line.indexOf("import ") !== 0 && line.indexOf("PublicAPI") === -1) {
                                 jsCodeArray.push(line);
