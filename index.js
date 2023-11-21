@@ -7,7 +7,7 @@ const overlay = document.getElementById("overlay");
 const authorContainer = document.getElementById("author-container");
 const author = document.getElementById("author");
 const sampleFileInputContainer = document.getElementById(
-    "sample-swfs-container"
+    "sample-swfs-container",
 );
 const localFileInput = document.getElementById("local-file");
 const sampleFileInput = document.getElementById("sample-swfs");
@@ -23,10 +23,11 @@ const optionGroups = {
 };
 
 // Default config used by the player.
-const defaultConfig = {
+const baseDemoConfig = {
     letterbox: "on",
     logLevel: "info",
     forceScale: true,
+    forceAlign: true,
     maxExecutionDuration: version && new Date(version.split(".").slice(-3).join("/")) < new Date("2023/4/26") ? {"secs": 30, "nanos": 0} : 30,
 };
 
@@ -91,7 +92,7 @@ function load(options) {
     player = ruffle.createPlayer();
     player.id = "player";
     main.append(player);
-    player.load(options);
+    player.load(options, false);
     player.addEventListener("loadedmetadata", function () {
         if (this.metadata) {
             for (const [key, value] of Object.entries(this.metadata)) {
@@ -106,7 +107,7 @@ function load(options) {
                             break;
                         case "swfVersion":
                             document.getElementById(
-                                "flashVersion"
+                                "flashVersion",
                             ).textContent = swfToFlashVersion[value];
                         // falls through and executes the default case as well
                         default:
@@ -142,7 +143,7 @@ async function loadFile(file) {
     }
     hideSample();
     const data = await new Response(file).arrayBuffer();
-    load({ data: data, swfFileName: file.name, ...defaultConfig });
+    load({ data: data, swfFileName: file.name, ...baseDemoConfig });
 }
 
 function loadSample() {
@@ -150,7 +151,7 @@ function loadSample() {
     localFileName.textContent = "No file selected.";
     if (swfData) {
         showSample(swfData);
-        const config = swfData.config || defaultConfig;
+        const config = swfData.config || baseDemoConfig;
         load({ url: swfData.location, ...config });
     } else {
         hideSample();
@@ -215,7 +216,7 @@ reloadSwf.addEventListener("click", () => {
     if (player) {
         const confirmReload = confirm("Reload the current SWF?");
         if (confirmReload) {
-            player.load(player.loadedConfig);
+            player.reload();
         }
     }
 });
@@ -223,7 +224,9 @@ reloadSwf.addEventListener("click", () => {
 window.addEventListener("load", () => {
     if (
         navigator.userAgent.match(/iPad/i) ||
-        navigator.userAgent.match(/iPhone/i)
+        navigator.userAgent.match(/iPhone/i) ||
+        (navigator.platform === "MacIntel" &&
+            typeof navigator.standalone !== "undefined")
     ) {
         localFileInput.removeAttribute("accept");
     }
@@ -251,7 +254,7 @@ window.onclick = (event) => {
             } else {
                 sampleFileInput.insertBefore(
                     option,
-                    sampleFileInput.firstChild
+                    sampleFileInput.firstChild,
                 );
             }
         }
@@ -264,7 +267,7 @@ window.onclick = (event) => {
         const options = Array.from(sampleFileInput.options);
         sampleFileInput.selectedIndex = Math.max(
             options.findIndex((swfData) => swfData.value.endsWith(initialFile)),
-            0
+            0,
         );
     }
     loadSample();
