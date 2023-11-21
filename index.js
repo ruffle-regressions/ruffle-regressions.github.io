@@ -27,7 +27,7 @@ const defaultConfig = {
     letterbox: "on",
     logLevel: "info",
     forceScale: true,
-    maxExecutionDuration: {"secs": 30, "nanos": 0},
+    maxExecutionDuration: version && new Date(version.split(".").slice(-3).join("/")) < new Date("2023/4/26") ? {"secs": 30, "nanos": 0} : 30,
 };
 
 const swfToFlashVersion = {

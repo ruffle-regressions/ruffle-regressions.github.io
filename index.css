@@ -187,7 +187,8 @@ body {
         display: block;
     }
 
-    #local-file-container {
+    #local-file-container,
+    #ruffle-version-container {
         margin-bottom: 10px;
     }
 }
