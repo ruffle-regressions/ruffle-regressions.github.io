@@ -115,7 +115,7 @@
             const version = searchParams.get('version');
             const cdn = document.createElement("script");
             if (version) {
-                const cdnURL = "https://unpkg.com/@ruffle-rs/ruffle@" + version;
+                const cdnURL = "https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@" + version;
                 fetch(cdnURL)
                 .then((response) => {
                     if (response.ok) {
