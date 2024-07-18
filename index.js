@@ -77,6 +77,16 @@ const swfToFlashVersion = {
     43: "32",
 };
 
+// accept filters break file selection on iOS/iPadOS
+if (
+    navigator.userAgent.match(/iPad/i) ||
+    navigator.userAgent.match(/iPhone/i) ||
+    (navigator.platform === "MacIntel" &&
+        typeof navigator.standalone !== "undefined")
+) {
+    localFileInput.removeAttribute("accept");
+}
+
 function unload() {
     if (player) {
         player.remove();
@@ -222,14 +232,6 @@ reloadSwf.addEventListener("click", () => {
 });
 
 window.addEventListener("load", () => {
-    if (
-        navigator.userAgent.match(/iPad/i) ||
-        navigator.userAgent.match(/iPhone/i) ||
-        (navigator.platform === "MacIntel" &&
-            typeof navigator.standalone !== "undefined")
-    ) {
-        localFileInput.removeAttribute("accept");
-    }
     overlay.classList.remove("hidden");
 });
 
