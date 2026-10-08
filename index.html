@@ -28,7 +28,7 @@
                 </div>
                 <div id="local-file-container">
                     <span id="local-file-static-label">Local SWF:</span>
-                    <input type="file" accept=".swf,.spl" id="local-file" 
+                    <input type="file" accept=".swf,.spl" id="local-file"
                         aria-describedby="local-file-static-label" />
                     <label for="local-file" id="local-file-label">Select File</label>
                     <span id="local-file-name">No file selected.</span>
@@ -99,12 +99,9 @@
             function reloadRuffle(version) {
                 document.location.href = "?version=" + version;
             }
-            function versionToDate(version) {
-                return version.split(".").slice(-3).map((el) => el.padStart(2, "0")).join("-");
-            }
             function makeSelectVersion(versions) {
                 const versionDropdown = document.getElementById("ruffle-versions");
-                versions.forEach((version) => versionDropdown.add(new Option(versionToDate(version), version)));
+                versions.forEach((version) => versionDropdown.add(new Option(version, version)));
             }
             const jsdelivrAPIURL = "https://data.jsdelivr.com/v1/package/npm/@ruffle-rs/ruffle";
             fetch(jsdelivrAPIURL)
