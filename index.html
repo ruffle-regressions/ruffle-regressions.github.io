@@ -99,14 +99,16 @@
             function reloadRuffle(version) {
                 document.location.href = "?version=" + version;
             }
-            function makeSelectVersion(versions) {
+            function makeSelectVersion(json) {
                 const versionDropdown = document.getElementById("ruffle-versions");
+                const versions = json['versions'];
                 versions.forEach((version) => versionDropdown.add(new Option(version, version)));
+                versionDropdown.value = json['tags']['latest'];
             }
             const jsdelivrAPIURL = "https://data.jsdelivr.com/v1/package/npm/@ruffle-rs/ruffle";
             fetch(jsdelivrAPIURL)
             .then((response) => response.json())
-            .then((json) => makeSelectVersion(json['versions']));
+            .then((json) => makeSelectVersion(json));
             const search = window.location.search;
             const searchParams = new URLSearchParams(search);
             const version = searchParams.get('version');
