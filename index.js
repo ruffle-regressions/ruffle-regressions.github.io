@@ -1,4 +1,5 @@
 const ruffle = window.RufflePlayer.newest();
+const ruffleDate = new Date(ruffle.version.split("+").pop());
 
 let player;
 
@@ -28,7 +29,9 @@ const baseDemoConfig = {
     logLevel: "info",
     forceScale: true,
     forceAlign: true,
-    maxExecutionDuration: {"secs": 30, "nanos": 0},
+    // Any RufflePlayer with a valid date in its `version` property
+    // should support the new maxExecutionDuration format
+    maxExecutionDuration: isNaN(ruffleDate) ? {"secs": 30, "nanos": 0} : 30,
 };
 
 const swfToFlashVersion = {
