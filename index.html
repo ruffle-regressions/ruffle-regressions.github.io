@@ -121,7 +121,7 @@
                         cdn.setAttribute("src", cdnURL);
                         document.getElementById("ruffle-versions").value = version;
                     } else {
-                        cdn.setAttribute("src", "https://unpkg.com/@ruffle-rs/ruffle");
+                        document.getElementById("ruffle-versions").value = null;
                     }
                 }).catch((error) => {
                     cdn.setAttribute("src", "https://unpkg.com/@ruffle-rs/ruffle");
