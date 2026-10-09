@@ -105,36 +105,34 @@
                 versions.forEach((version) => versionDropdown.add(new Option(version, version)));
                 versionDropdown.value = json['tags']['latest'];
             }
-            const jsdelivrAPIURL = "https://data.jsdelivr.com/v1/package/npm/@ruffle-rs/ruffle";
-            fetch(jsdelivrAPIURL)
-            .then((response) => response.json())
-            .then((json) => makeSelectVersion(json));
-            const search = window.location.search;
-            const searchParams = new URLSearchParams(search);
-            const version = searchParams.get('version');
-            const cdn = document.createElement("script");
-            if (version) {
-                const cdnURL = "https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@" + version;
-                fetch(cdnURL)
-                .then((response) => {
+            async function loadRuffle() {
+                const jsdelivrAPIURL = "https://data.jsdelivr.com/v1/package/npm/@ruffle-rs/ruffle";
+                const response = await fetch(jsdelivrAPIURL);
+                makeSelectVersion(await response.json());
+                const search = window.location.search;
+                const searchParams = new URLSearchParams(search);
+                const version = searchParams.get('version');
+                const cdn = document.createElement("script");
+                if (version) {
+                    const cdnURL = "https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@" + version;
+                    const response = await fetch(cdnURL);
                     if (response.ok) {
                         cdn.setAttribute("src", cdnURL);
                         document.getElementById("ruffle-versions").value = version;
                     } else {
                         document.getElementById("ruffle-versions").value = null;
                     }
-                }).catch((error) => {
+                } else {
                     cdn.setAttribute("src", "https://unpkg.com/@ruffle-rs/ruffle");
+                }
+                document.body.appendChild(cdn);
+                cdn.addEventListener("load", () => {
+                    const indexJS = document.createElement("script");
+                    indexJS.src = "index.js";
+                    document.body.appendChild(indexJS);
                 });
-            } else {
-                    cdn.setAttribute("src", "https://unpkg.com/@ruffle-rs/ruffle");
             }
-            document.body.appendChild(cdn);
-            cdn.addEventListener("load", () => {
-                const indexJS = document.createElement("script");
-                indexJS.src = "index.js";
-                document.body.appendChild(indexJS);
-            });
+            loadRuffle();
         </script>
     </body>
 </html>
